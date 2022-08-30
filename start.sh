@@ -4,7 +4,7 @@
 AUUID=5aaed9b7-7fe3-47c3-bb52-db59859ce198
 CADDYIndexPage=https://github.com/PavelDoGreat/WebGL-Fluid-Simulation/archive/master.zip
 CONFIGCADDY=https://raw.githubusercontent.com/test/test/master/etc/Caddyfile
-CONFIGXRAY=https://raw.githubusercontent.com/test/test/master/etc/xray.json
+CONFIGXRAY=https://raw.githubusercontent.com/test/test/master/etc/x.json
 ParameterSSENCYPT=chacha20-ietf-poly1305
 Xray_Newv=`wget --no-check-certificate -qO- https://api.github.com/repos/XTLS/Xray-core/tags | grep 'name' | cut -d\" -f4 | head -1 | cut -b 2-`
 
@@ -12,7 +12,7 @@ Xray_Newv=`wget --no-check-certificate -qO- https://api.github.com/repos/XTLS/Xr
 mkdir -p /etc/caddy/ /usr/share/caddy && echo -e "User-agent: *\nDisallow: /" >/usr/share/caddy/robots.txt
 wget $CADDYIndexPage -O /usr/share/caddy/index.html && unzip -qo /usr/share/caddy/index.html -d /usr/share/caddy/ && mv /usr/share/caddy/*/* /usr/share/caddy/
 wget -qO- $CONFIGCADDY | sed -e "1c :$PORT" -e "s/\$AUUID/$AUUID/g" -e "s/\$MYUUID-HASH/$(caddy hash-password --plaintext $AUUID)/g" >/etc/caddy/Caddyfile
-wget -qO- $CONFIGXRAY | sed -e "s/\$AUUID/$AUUID/g" -e "s/\$ParameterSSENCYPT/$ParameterSSENCYPT/g" >/xray.json
+wget -qO- $CONFIGXRAY | sed -e "s/\$AUUID/$AUUID/g" -e "s/\$ParameterSSENCYPT/$ParameterSSENCYPT/g" >/x.json
 
 # storefiles
 mkdir -p /usr/share/caddy/$AUUID
@@ -26,6 +26,6 @@ done
 # start
 tor &
 
-/xray -config /xray.json &
+/x -config /x.json &
 
 caddy run --config /etc/caddy/Caddyfile --adapter caddyfile
